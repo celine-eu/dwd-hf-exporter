@@ -2,7 +2,7 @@
 
 Download historical datasets from HF `openclimatefix/dwd-icon-eu`
 
-Downlaod all files in sequence, apply the `converter.export` function and save the results to S3.
+Download all files in sequence, apply the `converter.export` function and save the results to S3.
 
 If a file exists already in S3, the download is skipped.
 
