@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "dwd_hf_exporter"
+    ]
+}

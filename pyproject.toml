@@ -1,0 +1,11 @@
+[project]
+name = "dwd-hf-exporter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.41.1",
+    "huggingface-hub>=1.1.5",
+    "python-dotenv>=1.2.1",
+]
