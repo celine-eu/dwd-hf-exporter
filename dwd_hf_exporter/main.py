@@ -112,7 +112,7 @@ def process_single_day(
     for remote_path in hf_files:
         filename = os.path.basename(remote_path)
 
-        local_dir = os.path.join(local_root, f"{yyyy}/{mm:02d}/{dd:02d}")
+        local_dir = os.path.join(local_root, f"{yyyy}/{mm}/{dd}")
         os.makedirs(local_dir, exist_ok=True)
 
         local_original = os.path.join(local_dir, filename)
@@ -132,12 +132,13 @@ def process_single_day(
         # 3. Download
         print(f"   Downloading HF file: {remote_path}")
         try:
+            temp_local_dir = './'
             if not dryrun:
                 downloaded_path = hf_hub_download(
                     repo_id=repo_id,
                     filename=remote_path,
                     repo_type="dataset",
-                    local_dir=local_dir,
+                    local_dir=temp_local_dir,
                     force_download=force,
                 )
             else:
@@ -239,10 +240,10 @@ if __name__ == "__main__":
     run_pipeline(
         repo_id="openclimatefix/dwd-icon-eu",
         start_date="2025-07-01",
-        end_date="2025-08-31",
+        end_date="2025-07-01",
         local_root="./data",
         s3_bucket="celine-pipelines-dwd",
         s3_prefix="openclimatefix--dwd-icon-eu",
         force=False,
-        dryrun=True,
+        dryrun=False,
     )
