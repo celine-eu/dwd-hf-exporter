@@ -1,0 +1,21 @@
+version: "3"
+
+tasks:
+  apply:
+    deps: [delete]
+    cmds:
+      - kubectl create secret generic dwd-hf-exporter --from-file=env=.env
+      - kubectl apply -f pod.yaml
+
+  delete:
+    cmds:
+      - kubectl delete secret dwd-hf-exporter
+      - kubectl delete -f pod.yaml
+
+  bash:
+    cmds:
+      - kubectl exec -it dwd-hf-exporter -- bash
+
+  logs:
+    cmds:
+      - kubectl logs dwd-hf-exporter -f
