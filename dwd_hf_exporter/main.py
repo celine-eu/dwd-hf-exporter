@@ -208,16 +208,20 @@ def run_pipeline(
     dryrun: bool = False,
 ):
 
+    print("Starting DWD HF Exporter Pipeline")
     api = HfApi()
     s3 = get_s3_client()
 
     start = datetime.fromisoformat(start_date)
     end = datetime.fromisoformat(end_date)
 
+    print("Dates:", start.date(), "to", end.date())
+
     date = start
     results = []
 
     while date <= end:
+        print(f"\nProcessing date: {date.date()}")
         day_results = process_single_day(
             s3=s3,
             api=api,

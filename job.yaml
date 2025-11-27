@@ -1,20 +1,17 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: dwd-hf-exporter
   labels:
     app: dwd-hf-exporter
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: dwd-hf-exporter
+  backoffLimit: 1 # retry only once on failure
   template:
     metadata:
       labels:
         app: dwd-hf-exporter
     spec:
-      restartPolicy: Always
+      restartPolicy: Never # required for Jobs
       containers:
         - name: uv-python
           image: ghcr.io/astral-sh/uv:python3.12-bookworm
@@ -24,13 +21,20 @@ spec:
             - bash
             - -c
             - |
+              set -e
+
               apt update && apt install git nano -y
+
               git clone https://github.com/celine-eu/dwd-hf-exporter.git
               cd dwd-hf-exporter
-              cp ../.env .env
+
+              cp ../config.env .env
+
               uv sync
+
               echo "Deps installed. Starting exporter..."
-              .venv/bin/python dwd_hf_exporter/main.py
+              exec .venv/bin/python dwd_hf_exporter/main.py
+
           resources:
             requests:
               cpu: "100m"
@@ -38,10 +42,12 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
+
           volumeMounts:
             - name: dwd-hf-exporter-env
-              mountPath: /app/.env
+              mountPath: /app/config.env
               subPath: env
+
       volumes:
         - name: dwd-hf-exporter-env
           secret:
