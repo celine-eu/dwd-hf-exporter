@@ -2,8 +2,8 @@ version: "3"
 
 tasks:
   apply:
+    deps: [delete]
     cmds:
-      - kubectl delete secret dwd-hf-exporter-env || true
       - kubectl create secret generic dwd-hf-exporter-env --from-file=env=.env
       - kubectl apply -f job.yaml
       - sleep 2
@@ -11,7 +11,7 @@ tasks:
 
   delete:
     cmds:
-      - kubectl delete secret dwd-hf-exporter || true
+      - kubectl delete secret dwd-hf-exporter-env || true
       - kubectl delete -f job.yaml || true
 
   bash:

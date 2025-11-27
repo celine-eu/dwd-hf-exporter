@@ -8,9 +8,8 @@ import time
 import converter  # your converter
 
 # Enable HF Transfer for large files
-os.environ["HF_HUB_VERBOSE"] = "1"
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
-
+os.environ["HF_HUB_VERBOSE"] = "2"
 
 # -------------------------------------------------------------------
 # Load environment variables
@@ -250,7 +249,7 @@ if __name__ == "__main__":
     run_pipeline(
         repo_id="openclimatefix/dwd-icon-eu",
         start_date="2025-07-01",
-        end_date="2025-07-01",
+        end_date="2025-08-31",
         local_root="./data",
         s3_bucket="celine-pipelines-dwd",
         s3_prefix="openclimatefix--dwd-icon-eu",

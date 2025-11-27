@@ -21,7 +21,7 @@ spec:
             - bash
             - -c
             - |
-              set -e
+              set -ex
 
               apt update && apt install git nano -y
 
@@ -33,15 +33,20 @@ spec:
               uv sync
 
               echo "Deps installed. Starting exporter..."
-              exec .venv/bin/python dwd_hf_exporter/main.py
+
+              exec .venv/bin/python -u dwd_hf_exporter/main.py
 
           resources:
             requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
               cpu: "1"
-              memory: "1Gi"
+              memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
 
           volumeMounts:
             - name: dwd-hf-exporter-env
