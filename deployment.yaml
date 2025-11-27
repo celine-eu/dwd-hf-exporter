@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dwd-hf-exporter
+  labels:
+    app: dwd-hf-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dwd-hf-exporter
+  template:
+    metadata:
+      labels:
+        app: dwd-hf-exporter
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: uv-python
+          image: ghcr.io/astral-sh/uv:python3.12-bookworm
+          imagePullPolicy: IfNotPresent
+          workingDir: /app
+          command:
+            - bash
+            - -c
+            - |
+              apt update && apt install git nano -y
+              git clone https://github.com/celine-eu/dwd-hf-exporter.git
+              cd dwd-hf-exporter
+              cp ../.env .env
+              uv sync
+              echo "Deps installed. Starting exporter..."
+              .venv/bin/python dwd_hf_exporter/main.py
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          volumeMounts:
+            - name: dwd-hf-exporter-env
+              mountPath: /app/.env
+              subPath: env
+      volumes:
+        - name: dwd-hf-exporter-env
+          secret:
+            secretName: dwd-hf-exporter-env

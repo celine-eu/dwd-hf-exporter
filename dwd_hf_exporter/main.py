@@ -7,6 +7,11 @@ from huggingface_hub import HfApi, hf_hub_download
 import time
 import converter  # your converter
 
+# Enable HF Transfer for large files
+os.environ["HF_HUB_VERBOSE"] = "1"
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
+
+
 # -------------------------------------------------------------------
 # Load environment variables
 # -------------------------------------------------------------------
@@ -132,7 +137,7 @@ def process_single_day(
         # 3. Download
         print(f"   Downloading HF file: {remote_path}")
         try:
-            temp_local_dir = './'
+            temp_local_dir = "./"
             if not dryrun:
                 downloaded_path = hf_hub_download(
                     repo_id=repo_id,
