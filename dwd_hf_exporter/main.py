@@ -246,6 +246,7 @@ def run_pipeline(
 # -------------------------------------------------------------------
 
 if __name__ == "__main__":
+    print("DWD HF Exporter main.py")
     run_pipeline(
         repo_id="openclimatefix/dwd-icon-eu",
         start_date="2025-07-01",
